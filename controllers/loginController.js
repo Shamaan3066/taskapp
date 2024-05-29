@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 
 exports.loginController = async (req, res, next) => {
     try {
@@ -21,7 +21,7 @@ exports.loginController = async (req, res, next) => {
             });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await argon2.verify(user.password, password);
 
         if(!isMatch) {
             return res.status(400).json({

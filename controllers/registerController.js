@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 
 exports.registerController = async (req, res, next) => {
     try {
@@ -23,8 +23,7 @@ exports.registerController = async (req, res, next) => {
         }
 
         // Password hashing
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await argon2.hash(password);
 
         // User creation with specific error handling
         try {
