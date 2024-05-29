@@ -9,7 +9,7 @@ const taskRoutes = require('./routes/taskRoutes');
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || || 5001;
 const allowedOrigin = process.env.ALLOWED_ORIGINS;
 
 //Middlewares
