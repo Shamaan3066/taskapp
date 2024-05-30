@@ -1,4 +1,3 @@
-// TaskItem.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { taskApi } from '../utils/ApiRequest';
@@ -48,7 +47,7 @@ const TaskItem = ({ task, onTaskDeleted }) => {
   };
 
   return (
-    <div className="task-item">
+    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
       {!editMode ? (
         <>
           <input
