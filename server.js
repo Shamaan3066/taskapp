@@ -15,7 +15,7 @@ const allowedOrigin = process.env.ALLOWED_ORIGINS;
 //Middlewares
 app.use(express.json());
 app.use(cors({
-    origin: [allowedOrigin, 'http://localhost:3000'],
+    origin: [allowedOrigin, 'http://localhost:3000', 'taskapp-vert.vercel.app'],
     credentials: true,
     methods: ['GET', 'POST', 'UPDATE', 'DELETE', 'PUT']
 }))
