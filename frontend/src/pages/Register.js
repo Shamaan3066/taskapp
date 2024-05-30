@@ -1,10 +1,10 @@
 // Register.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerAPI } from '../utils/ApiRequest';
-import './auth.css'; // Importing auth.css for styling
+import { toast } from 'react-toastify';
+import './auth.css';
 
 const Register = () => {
     const [loading, setLoading] = useState(false);
@@ -21,7 +21,6 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setLoading(true);
 
         const { name, email, password } = values;
@@ -30,24 +29,25 @@ const Register = () => {
             const { data } = await axios.post(registerAPI, { name, email, password });
 
             if (data.success === true) {
-                const userData = data.user
+                const userData = data.user;
                 delete userData.password;
                 localStorage.setItem('userId', JSON.stringify(userData));
+                toast.success('Registration successful!');
                 navigate('/');
             } else {
-                console.error('Failed to SignUp:', data.message);
+                toast.error(`Failed to sign up: ${data.message}`);
             }
         } catch (error) {
-            console.error('Error during registration:', error);
+            toast.error(`Error during registration: ${error.message}`);
         } finally {
             setLoading(false);
         }
     }
 
     return (
-        <div className="register-container"> {/* Added class name for styling */}
+        <div className="auth-container">
             <h2>Register</h2>
-            <form onSubmit={handleSubmit} className="register-form"> {/* Added class name for styling */}
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="name">Name:</label>
                     <input
@@ -57,6 +57,7 @@ const Register = () => {
                         value={values.name}
                         placeholder="Enter name"
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <div>
@@ -68,6 +69,7 @@ const Register = () => {
                         value={values.email}
                         placeholder="Enter email"
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <div>
@@ -79,6 +81,7 @@ const Register = () => {
                         value={values.password}
                         placeholder="Enter password"
                         onChange={handleChange}
+                        required
                     />
                 </div>
                 <button disabled={loading}>

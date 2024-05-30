@@ -1,9 +1,9 @@
 // TaskForm.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { taskApi } from '../utils/ApiRequest';
-import './components.css'; // Importing components.css for styling
+import { toast } from 'react-toastify';
+import './components.css';
 
 const TaskForm = () => {
   const [title, setTitle] = useState('');
@@ -14,17 +14,18 @@ const TaskForm = () => {
     try {
       const userData = JSON.parse(localStorage.getItem('userId'));
       const userId = userData._id;
-      const response = await axios.post(`${taskApi}`, { title, description, userId });
+      await axios.post(`${taskApi}`, { title, description, userId });
       setTitle('');
       setDescription('');
+      toast.success('Task added successfully!');
       window.location.reload();
     } catch (error) {
-      console.error('Error adding task:', error);
+      toast.error(`Error adding task: ${error.message}`);
     }
   };
 
   return (
-    <div className="task-form-container"> {/* Added class name for styling */}
+    <div className="task-form-container">
       <h2>Add New Task</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -32,12 +33,14 @@ const TaskForm = () => {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
         <input
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          required
         />
         <button type="submit">Add Task</button>
       </form>

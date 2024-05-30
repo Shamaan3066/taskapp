@@ -1,9 +1,9 @@
 // TaskItem.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { taskApi } from '../utils/ApiRequest';
-import './components.css'; // Importing components.css for styling
+import { toast } from 'react-toastify';
+import './components.css';
 
 const TaskItem = ({ task, onTaskDeleted }) => {
   const [editMode, setEditMode] = useState(false);
@@ -17,9 +17,10 @@ const TaskItem = ({ task, onTaskDeleted }) => {
         description: editedDescription,
       });
       setEditMode(false);
+      toast.success('Task updated successfully!');
       window.location.reload();
     } catch (error) {
-      console.error('Error updating task:', error);
+      toast.error(`Error updating task: ${error.message}`);
     }
   };
 
@@ -27,8 +28,9 @@ const TaskItem = ({ task, onTaskDeleted }) => {
     try {
       await axios.delete(`${taskApi}/${task._id}`);
       onTaskDeleted(task._id);
+      toast.success('Task deleted successfully!');
     } catch (error) {
-      console.error('Error deleting task:', error);
+      toast.error(`Error deleting task: ${error.message}`);
     }
   };
 
@@ -38,14 +40,15 @@ const TaskItem = ({ task, onTaskDeleted }) => {
       await axios.put(`${taskApi}/${task._id}`, {
         completed: newCompletedStatus,
       });
+      toast.success('Task status updated!');
       window.location.reload();
     } catch (error) {
-      console.error('Error updating task:', error);
+      toast.error(`Error updating task: ${error.message}`);
     }
   };
 
   return (
-    <div className="task-item"> {/* Added class name for styling */}
+    <div className="task-item">
       {!editMode ? (
         <>
           <input
@@ -54,7 +57,7 @@ const TaskItem = ({ task, onTaskDeleted }) => {
             onChange={handleCheckboxChange}
           />
           <span>{task.title}</span>
-          <p>{task.description}</p>
+          <p>------ {task.description}</p>
           <button onClick={() => setEditMode(true)}>Edit</button>
           <button onClick={handleDelete}>Delete</button>
         </>

@@ -1,10 +1,10 @@
 // Login.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginAPI } from '../utils/ApiRequest'; // Ensure the import path is correct
-import './auth.css'; // Importing auth.css for styling
+import { loginAPI } from '../utils/ApiRequest';
+import { toast } from 'react-toastify';
+import './auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +20,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
     const { email, password } = values;
@@ -34,21 +33,22 @@ const Login = () => {
             }
             delete data.user.password;
             localStorage.setItem('userId', JSON.stringify(data.user));
+            toast.success('Login successful!');
             navigate('/');
         } else {
-            console.error('Failed to Login:', data.message);
+            toast.error(`Failed to login: ${data.message}`);
         }
     } catch (error) {
-        console.error('Error during registration:', error);
+        toast.error(`Error during login: ${error.message}`);
     } finally {
         setLoading(false);
     }
   }
 
   return (
-    <div className="login-container"> {/* Added class name for styling */}
+    <div className="auth-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="login-form"> {/* Added class name for styling */}
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email:</label>
           <input
